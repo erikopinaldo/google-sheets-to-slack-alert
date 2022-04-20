@@ -13,12 +13,12 @@ function buildStandupOwner() {
   let rowNumber = buildRow(nextMonday) 
   
   // Check if next Monday's date exists in the chosen date column. If it doesn't exist yet, tell readers to check the spreadsheet manually. 
-  if (rowNumber !== 0) {
+  try {
     data = ss.getSheetByName('Data').getRange(rowNumber, agentColumn).getValues().toString(); // Gets the cell value in column in row that matches next Monday's date (string)
   }
-  else {
+  catch(e) {
+    Logger.log(e)
     data = "Please check the spreadsheet!"
-    Logger.log('Sheet query error: next Monday does not exist in Sheet')
     }
 
   // Variable "data" needs to be a string

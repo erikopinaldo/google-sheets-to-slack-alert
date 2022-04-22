@@ -5,7 +5,7 @@ let agentColumn = 2
 // Parent function 
 function buildStandupOwner() {
   
-  listUsers()
+  let slackUserList = listUsers()
   
   const ss = SpreadsheetApp.getActive();
   

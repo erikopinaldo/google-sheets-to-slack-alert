@@ -4,6 +4,9 @@ let agentColumn = 2
 
 // Parent function 
 function buildStandupOwner() {
+  
+  listUsers()
+  
   const ss = SpreadsheetApp.getActive();
   
   // Check the date of the following Monday
@@ -13,12 +16,12 @@ function buildStandupOwner() {
   let rowNumber = buildRow(nextMonday) 
   
   // Check if next Monday's date exists in the chosen date column. If it doesn't exist yet, tell readers to check the spreadsheet manually. 
-  if (rowNumber !== 0) {
+  try {
     data = ss.getSheetByName('Data').getRange(rowNumber, agentColumn).getValues().toString(); // Gets the cell value in column in row that matches next Monday's date (string)
   }
-  else {
+  catch(e) {
+    Logger.log(e)
     data = "Please check the spreadsheet!"
-    Logger.log('Sheet query error: next Monday does not exist in Sheet')
     }
 
   // Variable "data" needs to be a string
@@ -72,6 +75,24 @@ function buildAlert(data) {
     ]
   };
   return payload;
+}
+
+function listUsers() {
+  let token = ""; //https://api.slack.com/apps
+  let apiEndpoint = "https://slack.com/api/";
+  // var myUserID = MYUSERID;
+
+  let method = "users.list";
+  let payload = {token: token};
+
+  Logger.log(payload);
+
+  let completeUrl = apiEndpoint + method;
+  let jsonData = UrlFetchApp.fetch(completeUrl, {method: "post", payload: payload});
+  let membersFullArr = JSON.parse(jsonData).members;
+
+  let memberList = membersFullArr.map(member => member.profile.real_name)
+  Logger.log(memberList);
 }
 
 function sendAlert(payload) {

@@ -17,7 +17,7 @@ function buildStandupOwner() {
     sheetHost = ss.getSheetByName('Data').getRange(rowNumber, agentColumn).getValues().toString(); // Gets the cell value in column in row that matches next Monday's date (string)
   }
   catch(e) {
-    Logger.log(e)
+    Logger.log("buildStandoOwner(): " + e)
     sheetHost = "Please check the spreadsheet!"
   }
   
@@ -64,7 +64,7 @@ function listUsers() {
     let method = "users.list";
     let payload = {token: token};
 
-    Logger.log(payload);
+    Logger.log("listUsers() payload: " + payload);
 
     let completeUrl = apiEndpoint + method;
   
@@ -72,11 +72,11 @@ function listUsers() {
     let membersFullArr = JSON.parse(jsonData).members;
 
     let memberList = membersFullArr.map(member => member.profile.real_name)
-    Logger.log(memberList);
+    Logger.log("listUsers() memberlist:  " + memberList);
     return memberList
   }
   catch(e) {
-    Logger.log(e)
+    Logger.log("listUsers(): " + e)
   }
 }
 
@@ -86,7 +86,7 @@ function buildHost(sheetHost, slackUserList) {
     return slackUserList.find(member => member === sheetHost)
   }
   else {
-    Logger.log('No matching users found')
+    Logger.log('buildHost: No matching users found')
   }
 }
 

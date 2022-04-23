@@ -1,21 +1,24 @@
-// Parameter for getRange() is the column of dates that buildRow() will look through. Editing the spreadsheet's date column directly means this value should be updated as well.
+// dateColumnRange is the column of dates that buildRow() will get values for, which will later be filtered down to only "next Monday's" date. Editing the spreadsheet's date column directly means this value should be updated as well
 let sheetName =  "Data"
 let dateColumnRange = "A1:A"
 let dateColumnValues = SpreadsheetApp.getActive().getSheetByName(sheetName).getRange(dateColumnRange).getValues();
+
+// agentColumn is the column number for the column that contains all of the agents names (zero-based indices)
 let agentColumn = 2
 
 
 // Parent function 
 function buildStandupOwner() {
+  // Tells script to look at the Google Sheet that the script is anchored to
   const ss = SpreadsheetApp.getActive();
   
-  // Check the date of the following Monday
+  // Check the date of the following Monday based on "today's" date
   let nextMonday = getNextDayOfTheWeek("Monday", false) 
   
-  // Gets row number containing next Monday's date
+  // Gets row number containing next Monday's date (zero-based indices)
   let rowNumber = buildRow(nextMonday) 
   
-  // Check if next Monday's date exists in the chosen date column. If it doesn't exist yet, tell readers to check the spreadsheet manually. 
+  // Check if next Monday's date exists in the chosen date column. If it doesn't exist yet, tell readers to check the spreadsheet manually 
   try {
     sheetHost = ss.getSheetByName(sheetName).getRange(rowNumber, agentColumn).getValues().toString(); // Gets the cell value in column in row that matches next Monday's date (string)
   }
@@ -27,9 +30,10 @@ function buildStandupOwner() {
   // Get list of all users in workspace
   let slackUserList = listUsers()
 
+  // host is a Slack user ID that will be passed as a mention in the Slack message. Obtained by matching host name from Sheet to user name from slackUserList
   let host = buildHost(sheetHost, slackUserList)
   
-  // Variable "host" needs to be a string
+  // Build the payload for the Slack message sent via incoming webhook
   let payload = buildAlert(host); 
   sendAlert(payload);
 }
@@ -47,17 +51,14 @@ function getNextDayOfTheWeek(dayName, excludeToday = true, refDate = new Date())
 
 function buildRow(nextMonday) {
   let row = 0
-
   dateColumnValues.forEach((date, index) => {
     if (date.toString() === nextMonday.toString()) {
       row += index + 1
     }
   })
-
   return row
 }
 
-// Get a list of workspace's users
 // https://api.slack.com/methods/users.list
 function listUsers() {
   try {
@@ -73,15 +74,15 @@ function listUsers() {
     let jsonData = UrlFetchApp.fetch(completeUrl, {method: "post", payload: payload});
     let membersFullArr = JSON.parse(jsonData).members;
 
-    // Convert response to simple user list (key = real name, value = user ID)
-    let memberList = membersFullArr.map(member => {
+    // Convert JSON response to simpler, shorter, user list (key = real name, value = user ID)
+    let userList = membersFullArr.map(member => {
         const container = {}
         container[member.profile.real_name] = member.id
 
         return container
       })
-    Logger.log(memberList);
-    return memberList
+    Logger.log(userList);
+    return userList
   }
   catch(e) {
     Logger.log("listUsers(): " + e)

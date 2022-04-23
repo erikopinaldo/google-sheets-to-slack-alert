@@ -4,10 +4,6 @@ let agentColumn = 2
 
 // Parent function 
 function buildStandupOwner() {
-  
-  // Get list of all users in workspace
-  let slackUserList = listUsers()
-  
   const ss = SpreadsheetApp.getActive();
   
   // Check the date of the following Monday
@@ -18,13 +14,18 @@ function buildStandupOwner() {
   
   // Check if next Monday's date exists in the chosen date column. If it doesn't exist yet, tell readers to check the spreadsheet manually. 
   try {
-    host = ss.getSheetByName('Data').getRange(rowNumber, agentColumn).getValues().toString(); // Gets the cell value in column in row that matches next Monday's date (string)
+    sheetHost = ss.getSheetByName('Data').getRange(rowNumber, agentColumn).getValues().toString(); // Gets the cell value in column in row that matches next Monday's date (string)
   }
   catch(e) {
     Logger.log(e)
-    host = "Please check the spreadsheet!"
-    }
+    sheetHost = "Please check the spreadsheet!"
+  }
+  
+  // Get list of all users in workspace
+  let slackUserList = listUsers()
 
+  let host = buildHost(sheetHost, slackUserList)
+  
   // Variable "host" needs to be a string
   let payload = buildAlert(host); 
   sendAlert(payload);
@@ -53,6 +54,36 @@ function buildRow(nextMonday) {
   return row
 }
 
+// https://api.slack.com/methods/users.list
+function listUsers() {
+  let token = ""; //https://api.slack.com/apps
+  let apiEndpoint = "https://slack.com/api/";
+  // var myUserID = MYUSERID;
+
+  let method = "users.list";
+  let payload = {token: token};
+
+  Logger.log(payload);
+
+  let completeUrl = apiEndpoint + method;
+  let jsonData = UrlFetchApp.fetch(completeUrl, {method: "post", payload: payload});
+  let membersFullArr = JSON.parse(jsonData).members;
+
+  let memberList = membersFullArr.map(member => member.profile.real_name)
+  Logger.log(memberList);
+  return memberList
+}
+
+// Search for host in spreadsheet within the array of users we got from Slack
+function buildHost(sheetHost, slackUserList) {
+  if (slackUserList.includes(sheetHost)) {
+    return slackUserList.find(member => member === sheetHost)
+  }
+  else {
+    Logger.log('No matching users found')
+  }
+}
+
 function buildAlert(host) {
   let payload = {
     "blocks": [
@@ -76,25 +107,6 @@ function buildAlert(host) {
     ]
   };
   return payload;
-}
-
-// https://api.slack.com/methods/users.list
-function listUsers() {
-  let token = ""; //https://api.slack.com/apps
-  let apiEndpoint = "https://slack.com/api/";
-  // var myUserID = MYUSERID;
-
-  let method = "users.list";
-  let payload = {token: token};
-
-  Logger.log(payload);
-
-  let completeUrl = apiEndpoint + method;
-  let jsonData = UrlFetchApp.fetch(completeUrl, {method: "post", payload: payload});
-  let membersFullArr = JSON.parse(jsonData).members;
-
-  let memberList = membersFullArr.map(member => member.profile.real_name)
-  Logger.log(memberList);
 }
 
 function sendAlert(payload) {

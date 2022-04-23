@@ -1,6 +1,7 @@
 // Parameter for getRange() is the column of dates that buildRow() will look through. Editing the spreadsheet's date column directly means this value should be updated as well.
 let dateColumn = SpreadsheetApp.getActive().getSheetByName('Data').getRange("A1:A").getValues();
-let agentColumn = 2 
+let agentColumn = 2
+let sheetName =  'Data'
 
 // Parent function 
 function buildStandupOwner() {
@@ -14,7 +15,7 @@ function buildStandupOwner() {
   
   // Check if next Monday's date exists in the chosen date column. If it doesn't exist yet, tell readers to check the spreadsheet manually. 
   try {
-    sheetHost = ss.getSheetByName('Data').getRange(rowNumber, agentColumn).getValues().toString(); // Gets the cell value in column in row that matches next Monday's date (string)
+    sheetHost = ss.getSheetByName(sheetName).getRange(rowNumber, agentColumn).getValues().toString(); // Gets the cell value in column in row that matches next Monday's date (string)
   }
   catch(e) {
     Logger.log("buildStandoOwner(): " + e)

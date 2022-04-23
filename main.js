@@ -68,13 +68,14 @@ function listUsers() {
     let method = "users.list";
     let payload = {token: token};
     Logger.log("listUsers() payload: " + payload);
+
     let completeUrl = apiEndpoint + method;
 
-    // Set up payload for request
+    // Make request and store response in membersFullArr
     let jsonData = UrlFetchApp.fetch(completeUrl, {method: "post", payload: payload});
     let membersFullArr = JSON.parse(jsonData).members;
 
-    // Convert JSON response to simpler, shorter, user list (key = real name, value = user ID)
+    // Convert membersFullArr to simpler, shorter, user list (key = real name, value = user ID)
     let userList = membersFullArr.map(member => {
         const container = {}
         container[member.profile.real_name] = member.id

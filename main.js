@@ -1,7 +1,9 @@
 // Parameter for getRange() is the column of dates that buildRow() will look through. Editing the spreadsheet's date column directly means this value should be updated as well.
-let dateColumnValues = SpreadsheetApp.getActive().getSheetByName('Data').getRange("A1:A").getValues();
+let sheetName =  "Data"
+let dateColumnRange = "A1:A"
+let dateColumnValues = SpreadsheetApp.getActive().getSheetByName(sheetName).getRange(dateColumnRange).getValues();
 let agentColumn = 2
-let sheetName =  'Data'
+
 
 // Parent function 
 function buildStandupOwner() {

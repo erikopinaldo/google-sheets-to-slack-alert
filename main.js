@@ -70,9 +70,14 @@ function listUsers() {
     let jsonData = UrlFetchApp.fetch(completeUrl, {method: "post", payload: payload});
     let membersFullArr = JSON.parse(jsonData).members;
 
-    // Convert response to simple user list
-    let memberList = membersFullArr.map(member => member.profile.real_name)
-    Logger.log("listUsers() memberlist:  " + memberList);
+    // Convert response to simple user list (key = real name, value = user ID)
+    let memberList = membersFullArr.map(member => {
+        const container = {}
+        container[member.profile.real_name] = member.id
+
+        return container
+      })
+    Logger.log(memberList);
     return memberList
   }
   catch(e) {
@@ -82,12 +87,13 @@ function listUsers() {
 
 // Search for host in spreadsheet within the array of users we got from Slack
 function buildHost(sheetHost, slackUserList) {
-  if (slackUserList.includes(sheetHost)) {
-    return slackUserList.find(member => member === sheetHost)
-  }
-  else {
-    Logger.log('buildHost: No matching users found')
-  }
+  let hostID = ""
+  
+  // From the full workspace user/user ID object list, get the key value pair that corresponds to the host that is listed in the spreadsheet.
+  let member = slackUserList.find(memberObject => memberObject.hasOwnProperty(sheetHost))[sheetHost]
+
+  hostID += `<@${member}>`
+  return hostID
 }
 
 function buildAlert(host) {

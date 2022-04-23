@@ -58,19 +58,19 @@ function buildRow(nextMonday) {
 // https://api.slack.com/methods/users.list
 function listUsers() {
   try {
+    // Request set up
     let token = ""; //https://api.slack.com/apps
     let apiEndpoint = "https://slack.com/api/";
-
     let method = "users.list";
     let payload = {token: token};
-
     Logger.log("listUsers() payload: " + payload);
-
     let completeUrl = apiEndpoint + method;
-  
+
+    // Set up payload for request
     let jsonData = UrlFetchApp.fetch(completeUrl, {method: "post", payload: payload});
     let membersFullArr = JSON.parse(jsonData).members;
 
+    // Convert response to simple user list
     let memberList = membersFullArr.map(member => member.profile.real_name)
     Logger.log("listUsers() memberlist:  " + memberList);
     return memberList

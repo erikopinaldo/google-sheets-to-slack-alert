@@ -57,22 +57,27 @@ function buildRow(nextMonday) {
 // Get a list of workspace's users
 // https://api.slack.com/methods/users.list
 function listUsers() {
-  let token = ""; //https://api.slack.com/apps
-  let apiEndpoint = "https://slack.com/api/";
-  // var myUserID = MYUSERID;
+  try {
+    let token = ""; //https://api.slack.com/apps
+    let apiEndpoint = "https://slack.com/api/";
 
-  let method = "users.list";
-  let payload = {token: token};
+    let method = "users.list";
+    let payload = {token: token};
 
-  Logger.log(payload);
+    Logger.log(payload);
 
-  let completeUrl = apiEndpoint + method;
-  let jsonData = UrlFetchApp.fetch(completeUrl, {method: "post", payload: payload});
-  let membersFullArr = JSON.parse(jsonData).members;
+    let completeUrl = apiEndpoint + method;
+  
+    let jsonData = UrlFetchApp.fetch(completeUrl, {method: "post", payload: payload});
+    let membersFullArr = JSON.parse(jsonData).members;
 
-  let memberList = membersFullArr.map(member => member.profile.real_name)
-  Logger.log(memberList);
-  return memberList
+    let memberList = membersFullArr.map(member => member.profile.real_name)
+    Logger.log(memberList);
+    return memberList
+  }
+  catch(e) {
+    Logger.log(e)
+  }
 }
 
 // Search for host in spreadsheet within the array of users we got from Slack

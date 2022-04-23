@@ -63,7 +63,7 @@ function buildRow(nextMonday) {
 function listUsers() {
   try {
     // Request set up
-    let token = ""; //https://api.slack.com/apps
+    const token = ""; //https://api.slack.com/apps
     let apiEndpoint = "https://slack.com/api/";
     let method = "users.list";
     let payload = {token: token};

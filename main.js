@@ -90,7 +90,7 @@ function listUsers() {
   }
 }
 
-// Search for host in spreadsheet within the array of users we got from Slack
+// Search for host user ID in spreadsheet within the array of users we got from Slack
 function buildHost(sheetHost, slackUserList) {
   let hostID = ""
   

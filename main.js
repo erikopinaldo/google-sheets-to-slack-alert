@@ -5,6 +5,7 @@ let agentColumn = 2
 // Parent function 
 function buildStandupOwner() {
   
+  // Get list of all users in workspace
   let slackUserList = listUsers()
   
   const ss = SpreadsheetApp.getActive();
@@ -17,15 +18,15 @@ function buildStandupOwner() {
   
   // Check if next Monday's date exists in the chosen date column. If it doesn't exist yet, tell readers to check the spreadsheet manually. 
   try {
-    data = ss.getSheetByName('Data').getRange(rowNumber, agentColumn).getValues().toString(); // Gets the cell value in column in row that matches next Monday's date (string)
+    host = ss.getSheetByName('Data').getRange(rowNumber, agentColumn).getValues().toString(); // Gets the cell value in column in row that matches next Monday's date (string)
   }
   catch(e) {
     Logger.log(e)
-    data = "Please check the spreadsheet!"
+    host = "Please check the spreadsheet!"
     }
 
-  // Variable "data" needs to be a string
-  let payload = buildAlert(data); 
+  // Variable "host" needs to be a string
+  let payload = buildAlert(host); 
   sendAlert(payload);
 }
 
@@ -52,7 +53,7 @@ function buildRow(nextMonday) {
   return row
 }
 
-function buildAlert(data) {
+function buildAlert(host) {
   let payload = {
     "blocks": [
       {
@@ -69,7 +70,7 @@ function buildAlert(data) {
         "type": "section",
         "text": {
           "type": "mrkdwn",
-          "text": data
+          "text": host
         }
       }
     ]
@@ -77,6 +78,7 @@ function buildAlert(data) {
   return payload;
 }
 
+// https://api.slack.com/methods/users.list
 function listUsers() {
   let token = ""; //https://api.slack.com/apps
   let apiEndpoint = "https://slack.com/api/";

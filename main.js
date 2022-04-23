@@ -54,6 +54,7 @@ function buildRow(nextMonday) {
   return row
 }
 
+// Get a list of workspace's users
 // https://api.slack.com/methods/users.list
 function listUsers() {
   let token = ""; //https://api.slack.com/apps

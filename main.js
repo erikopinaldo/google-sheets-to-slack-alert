@@ -1,5 +1,5 @@
 // Parameter for getRange() is the column of dates that buildRow() will look through. Editing the spreadsheet's date column directly means this value should be updated as well.
-let dateColumn = SpreadsheetApp.getActive().getSheetByName('Data').getRange("A1:A").getValues();
+let dateColumnValues = SpreadsheetApp.getActive().getSheetByName('Data').getRange("A1:A").getValues();
 let agentColumn = 2
 let sheetName =  'Data'
 
@@ -46,7 +46,7 @@ function getNextDayOfTheWeek(dayName, excludeToday = true, refDate = new Date())
 function buildRow(nextMonday) {
   let row = 0
 
-  dateColumn.forEach((date, index) => {
+  dateColumnValues.forEach((date, index) => {
     if (date.toString() === nextMonday.toString()) {
       row += index + 1
     }

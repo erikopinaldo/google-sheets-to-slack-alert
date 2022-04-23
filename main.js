@@ -3,8 +3,8 @@ let sheetName =  "Data"
 let dateColumnRange = "A1:A"
 let dateColumnValues = SpreadsheetApp.getActive().getSheetByName(sheetName).getRange(dateColumnRange).getValues();
 
-// agentColumn is the column number for the column that contains all of the agents names (zero-based indices)
-let agentColumn = 2
+// agentColumnNumber is the column number for the column that contains all of the agents names (zero-based indices)
+let agentColumnNumber = 2
 
 
 // Parent function 
@@ -20,7 +20,7 @@ function buildStandupOwner() {
   
   // Check if next Monday's date exists in the chosen date column. If it doesn't exist yet, tell readers to check the spreadsheet manually 
   try {
-    sheetHost = ss.getSheetByName(sheetName).getRange(rowNumber, agentColumn).getValues().toString(); // Gets the cell value in column in row that matches next Monday's date (string)
+    sheetHost = ss.getSheetByName(sheetName).getRange(rowNumber, agentColumnNumber).getValues().toString(); // Gets the cell value in column in row that matches next Monday's date (string)
   }
   catch(e) {
     Logger.log("buildStandoOwner(): " + e)

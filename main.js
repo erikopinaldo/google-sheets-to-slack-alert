@@ -24,7 +24,7 @@ function buildStandupOwner() {
   }
   catch(e) {
     Logger.log("buildStandupOwner(): " + e)
-    sheetHost = "Please check the spreadsheet!"
+    sheetHost = "No host found. Please check the spreadsheet!"
   }
   
   // Get list of all users in workspace

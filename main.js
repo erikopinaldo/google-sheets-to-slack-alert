@@ -13,17 +13,17 @@ function buildStandupOwner() {
   const ss = SpreadsheetApp.getActive();
   
   // Check the date of the following Monday based on "today's" date
-  let nextMonday = getNextDayOfTheWeek("Monday", false) 
+  let nextMonday = getNextMonday("Monday", false) 
   
   // Gets row number containing next Monday's date (zero-based indices)
-  let rowNumber = buildRow(nextMonday) 
+  let nextMondayRowNumber = buildRow(nextMonday) 
   
   // Check if next Monday's date exists in the chosen date column. If it doesn't exist yet, tell readers to check the spreadsheet manually 
   try {
-    sheetHost = ss.getSheetByName(sheetName).getRange(rowNumber, agentColumnNumber).getValues().toString(); // Gets the cell value in column in row that matches next Monday's date (string)
+    sheetHost = ss.getSheetByName(sheetName).getRange(nextMondayRowNumber, agentColumnNumber).getValues().toString(); // Gets the cell value in column in row that matches next Monday's date (string)
   }
   catch(e) {
-    Logger.log("buildStandupOwner(): " + e)
+    Logger.log(e)
     sheetHost = "No host found. Please check the spreadsheet!"
   }
   
@@ -31,15 +31,15 @@ function buildStandupOwner() {
   let slackUserList = listUsers()
 
   // host is a Slack user ID that will be passed as a mention in the Slack message. Obtained by matching host name from Sheet to user name from slackUserList
-  let host = buildHost(sheetHost, slackUserList)
+  let slackHost = buildSlackHost(sheetHost, slackUserList)
   
   // Build the payload for the Slack message sent via incoming webhook
-  let payload = buildAlert(host); 
+  let payload = buildAlert(slackHost); 
   sendAlert(payload);
 }
 
 // https://stackoverflow.com/questions/33078406/getting-the-date-of-next-monday
-function getNextDayOfTheWeek(dayName, excludeToday = true, refDate = new Date()) {
+function getNextMonday(dayName, excludeToday = true, refDate = new Date()) {
     const dayOfWeek = ["sun","mon","tue","wed","thu","fri","sat"]
                       .indexOf(dayName.slice(0,3).toLowerCase());
     if (dayOfWeek < 0) return;
@@ -49,10 +49,10 @@ function getNextDayOfTheWeek(dayName, excludeToday = true, refDate = new Date())
     return refDate;
 }
 
-function buildRow(nextMonday) {
+function buildRow(nextMondayRowNumber) {
   let row = 0
   dateColumnValues.forEach((date, index) => {
-    if (date.toString() === nextMonday.toString()) {
+    if (date.toString() === nextMondayRowNumber.toString()) {
       row += index + 1
     }
   })
@@ -91,7 +91,7 @@ function listUsers() {
 }
 
 // Search for host user ID in spreadsheet within the array of users we got from Slack
-function buildHost(sheetHost, slackUserList) {
+function buildSlackHost(sheetHost, slackUserList) {
   let hostID = ""
   
   // From the full workspace user/user ID object list, get the key value pair that corresponds to the host that is listed in the spreadsheet.
@@ -101,7 +101,7 @@ function buildHost(sheetHost, slackUserList) {
   return hostID
 }
 
-function buildAlert(host) {
+function buildAlert(slackHost) {
   let payload = {
     "blocks": [
       {
@@ -118,7 +118,7 @@ function buildAlert(host) {
         "type": "section",
         "text": {
           "type": "mrkdwn",
-          "text": host
+          "text": slackHost
         }
       }
     ]

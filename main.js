@@ -23,7 +23,7 @@ function buildStandupOwner() {
     sheetHost = ss.getSheetByName(sheetName).getRange(rowNumber, agentColumnNumber).getValues().toString(); // Gets the cell value in column in row that matches next Monday's date (string)
   }
   catch(e) {
-    Logger.log("buildStandoOwner(): " + e)
+    Logger.log("buildStandupOwner(): " + e)
     sheetHost = "Please check the spreadsheet!"
   }
   

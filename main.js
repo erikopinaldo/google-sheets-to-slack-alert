@@ -21,17 +21,17 @@ function notifyStandupHost() {
   // Check if next Monday's date exists in the chosen date column. If it doesn't exist yet, tell readers to check the spreadsheet manually 
   try {
     sheetHost = ss.getSheetByName(sheetName).getRange(nextMondayRowNumber, agentColumnNumber).getValues().toString(); // Gets the cell value in column in row that matches next Monday's date (string)
-  }
-  catch(e) {
-    Logger.log(e)
-    sheetHost = "No host found. Please check the spreadsheet!"
-  }
-  
+
   // Get list of all users in workspace
   let slackUserList = listUsers()
 
   // host is a Slack user ID that will be passed as a mention in the Slack message. Obtained by matching host name from Sheet to user name from slackUserList
   let slackHost = buildSlackHost(sheetHost, slackUserList)
+  }
+  catch(e) {
+    Logger.log(e)
+    slackHost = "No host found. Please check the spreadsheet!"
+  }
   
   // Build the payload for the Slack message sent via incoming webhook
   let payload = buildAlert(slackHost); 

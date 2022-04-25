@@ -29,7 +29,7 @@ function notifyStandupHost() {
   let slackHost = buildSlackHost(sheetHost, slackUserList)
   }
   catch(e) {
-    Logger.log(e)
+    Logger.log("slackHost could not be found in sheet: " + e)
     slackHost = "No host found. Please check the spreadsheet!"
   }
   
@@ -86,7 +86,7 @@ function listUsers() {
     return userList
   }
   catch(e) {
-    Logger.log("listUsers(): " + e)
+    Logger.log("listUsers() error: " + e)
   }
 }
 
@@ -145,6 +145,6 @@ function sendAlert(payload) {
     Logger.log(`HTTP response headers: ${response}`);
   } 
   catch(e) {
-    Logger.log(e);
+    Logger.log("sendAlert() error: " + e);
   }
 }

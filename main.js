@@ -8,7 +8,7 @@ let agentColumnNumber = 2
 
 
 // Parent function 
-function buildStandupOwner() {
+function notifyStandupHost() {
   // Tells script to look at the Google Sheet that the script is anchored to
   const ss = SpreadsheetApp.getActive();
   

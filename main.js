@@ -6,7 +6,6 @@ let dateColumnValues = SpreadsheetApp.getActive().getSheetByName(sheetName).getR
 // agentColumnNumber is the column number for the column that contains all of the agents names (zero-based indices)
 let agentColumnNumber = 2
 
-
 // Parent function 
 function notifyStandupHost() {
   // Tells script to look at the Google Sheet that the script is anchored to
@@ -22,11 +21,11 @@ function notifyStandupHost() {
   try {
     sheetHost = ss.getSheetByName(sheetName).getRange(nextMondayRowNumber, agentColumnNumber).getValues().toString(); // Gets the cell value in column in row that matches next Monday's date (string)
 
-  // Get list of all users in workspace
-  let slackUserList = listUsers()
+    // Get list of all users in workspace
+    let slackUserList = listUsers()
 
-  // host is a Slack user ID that will be passed as a mention in the Slack message. Obtained by matching host name from Sheet to user name from slackUserList
-  let slackHost = buildSlackHost(sheetHost, slackUserList)
+    // host is a Slack user ID that will be passed as a mention in the Slack message. Obtained by matching host name from Sheet to user name from slackUserList
+    let slackHost = buildSlackHost(sheetHost, slackUserList)
   }
   catch(e) {
     Logger.log("slackHost could not be found in sheet: " + e)
@@ -40,13 +39,13 @@ function notifyStandupHost() {
 
 // https://stackoverflow.com/questions/33078406/getting-the-date-of-next-monday
 function getNextMonday(dayName, excludeToday = true, refDate = new Date()) {
-    const dayOfWeek = ["sun","mon","tue","wed","thu","fri","sat"]
-                      .indexOf(dayName.slice(0,3).toLowerCase());
-    if (dayOfWeek < 0) return;
-    refDate.setHours(0,0,0,0);
-    refDate.setDate(refDate.getDate() + +!!excludeToday + 
-                    (dayOfWeek + 7 - refDate.getDay() - +!!excludeToday) % 7);
-    return refDate;
+  const dayOfWeek = ["sun","mon","tue","wed","thu","fri","sat"]
+                    .indexOf(dayName.slice(0,3).toLowerCase());
+  if (dayOfWeek < 0) return;
+  refDate.setHours(0,0,0,0);
+  refDate.setDate(refDate.getDate() + +!!excludeToday + 
+                  (dayOfWeek + 7 - refDate.getDay() - +!!excludeToday) % 7);
+  return refDate;
 }
 
 function buildRow(nextMondayRowNumber) {

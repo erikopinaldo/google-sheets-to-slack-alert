@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 // dateColumnRange is the column of dates that buildRow() will get values for, which will later be filtered down to only "next Monday's" date. Editing the spreadsheet's date column directly means this value should be updated as well
 let sheetName = "Data"
 let dateColumnRange = "A1:A"
@@ -121,7 +123,7 @@ function buildAlert(slackHost) {
 }
 
 function sendAlert(payload) {
-  const webhook = "https://hooks.slack.com/workflows/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"; // Webhook URL
+  const webhook = WEBHOOK_URL; // Webhook URL
   var options = {
     "method": "post",
     "contentType": "application/json",

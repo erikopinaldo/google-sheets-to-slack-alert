@@ -37,7 +37,7 @@ function buildAlert(schedule) {
 }
 
 function sendAlert(payload) {
-  const webhook = "https://hooks.slack.com/workflows/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"; // Webhook URL
+  const webhook = ""; // Webhook URL
   var options = {
     "method": "post",
     "contentType": "application/json",

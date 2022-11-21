@@ -27,6 +27,10 @@ function notifySchedule() {
   sendAlert(payload);
 }
 
+function isWeekend(date = new Date()) {
+  return date.getDay() === 0 || date.getDay() === 6
+}
+
 function isMonday(date = new Date()) {
   return date.getDay() === 1;
 }

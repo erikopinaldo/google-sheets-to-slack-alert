@@ -8,9 +8,9 @@ function notifySchedule() {
   let currentWeekValue = currentWeekCell.getValue()
   Logger.log(`Current week value: ${currentWeekValue}`)
   let schedules = {
-    1: 'https://res.cloudinary.com/dqonprzjw/image/upload/v1668527388/Slack%20Schedules/week1_wg6qb5.png',
-    2: 'https://res.cloudinary.com/dqonprzjw/image/upload/v1668527397/Slack%20Schedules/week2_nvo0wl.png',
-    3: 'https://res.cloudinary.com/dqonprzjw/image/upload/v1668527405/Slack%20Schedules/week3_y3fzpq.png'
+    1: PropertiesService.getScriptProperties().getProperty('SCHEDULE_1'),
+    2: PropertiesService.getScriptProperties().getProperty('SCHEDULE_2'),
+    3: PropertiesService.getScriptProperties().getProperty('SCHEDULE_3')
   }
 
   Logger.log(`Is it Monday? ${isMonday()}`)

@@ -61,8 +61,8 @@ function sendAlert(payload) {
   try {
     let call = UrlFetchApp.fetch(webhook, options);
 
+    let status = call.getResponseCode();
     let response = JSON.stringify(call.getAllHeaders());
-    let status = JSON.stringify(call.getContentText())
 
     Logger.log(`HTTP response status: ${status}`)
     Logger.log(`HTTP response headers: ${response}`);

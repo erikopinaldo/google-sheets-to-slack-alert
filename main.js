@@ -15,6 +15,11 @@ function notifySchedule() {
 
   Logger.log(`Is it Monday? ${isMonday()}`)
 
+  // Check if today is a weekend day
+  if (isWeekend()) {
+    return // early return should prevent the rest of the function from running, therefore preventing the workflow from firing
+  }
+
   // Check if today is Monday
   if (isMonday()) {
     if (currentWeekValue === 3) currentWeekCell.setValue(1)

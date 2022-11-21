@@ -22,8 +22,14 @@ function notifySchedule() {
 
   // Check if today is Monday
   if (isMonday()) {
-    if (currentWeekValue === 3) currentWeekCell.setValue(1)
-    else currentWeekCell.setValue(currentWeekValue + 1)
+    if (currentWeekValue === 3) {
+      currentWeekValue = 1
+      currentWeekCell.setValue(1)
+    }
+    else {
+      currentWeekValue = currentWeekValue + 1
+      currentWeekCell.setValue(currentWeekValue)
+    }
   }
 
   let currentWeekValue = currentWeekCell.getValue()

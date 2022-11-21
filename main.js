@@ -1,5 +1,3 @@
-require('dotenv').config()
-
 let sheetName = 'Data'
 let currentWeekCell = SpreadsheetApp.getActive().getSheetByName(sheetName).getRange('C2')
 
@@ -56,12 +54,13 @@ function buildAlert(schedule) {
 }
 
 function sendAlert(payload) {
-  const webhook = WEBHOOK_URL; // Webhook URL
+  const webhook = PropertiesService.getScriptProperties().getProperty('WEBHOOK_URL'); // Webhook URL
   var options = {
     "method": "post",
     "contentType": "application/json",
     "muteHttpExceptions": true,
-    "payload": JSON.stringify(payload)
+    "payload": JSON.stringify(payload),
+    "followRedirects": false
   };
 
   try {

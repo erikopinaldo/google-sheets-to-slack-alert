@@ -13,6 +13,7 @@ function notifySchedule() {
     3: PropertiesService.getScriptProperties().getProperty('SCHEDULE_3')
   }
 
+  Logger.log(`Is it the weekend? ${isWeekend()}`)
   Logger.log(`Is it Monday? ${isMonday()}`)
 
   // Check if today is a weekend day

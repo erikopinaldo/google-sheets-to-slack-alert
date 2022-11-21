@@ -5,7 +5,7 @@ let currentWeekCell = SpreadsheetApp.getActive().getSheetByName(sheetName).getRa
 
 // Parent function 
 function notifySchedule() {
-  Logger.log(`Current week value: ${currentWeekValue}`)
+  let currentWeekValue = currentWeekCell.getValue()
   let schedules = {
     1: PropertiesService.getScriptProperties().getProperty('SCHEDULE_1'),
     2: PropertiesService.getScriptProperties().getProperty('SCHEDULE_2'),
@@ -32,7 +32,7 @@ function notifySchedule() {
     }
   }
 
-  let currentWeekValue = currentWeekCell.getValue()
+  Logger.log(`Current week value: ${currentWeekValue}`)
 
   // Build the payload for the Slack message sent via incoming webhook
   let payload = buildAlert(schedules[currentWeekValue]);
